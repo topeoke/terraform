@@ -19,7 +19,7 @@ pipeline {
                 dir('project1/'){
                     sh 'terraform --version'
                     sh "terraform init -input=false -plugin-dir=/var/jenkins_home/terraform_plugins \
-                     --backend-config='access_key=$AWS_ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
+                     --backend-config='access_key=$ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
                     sh "echo \$PWD"
                     sh "whoami"
                 }
@@ -34,7 +34,7 @@ pipeline {
                         } catch (err) {
                             sh "terraform workspace select ${params.WORKSPACE}"
                         }
-                        sh "terraform plan -var 'aws_access_key=$NETWORKING_ACCESS_KEY' -var 'aws_secret_key=$NETWORKING_SECRET_KEY' \
+                        sh "terraform plan -var 'aws_access_key=$ACCESS_KEY' -var 'aws_secret_key=$ACCESS_SECRET_KEY' \
                         > status"
                     }
                 }
@@ -49,7 +49,7 @@ pipeline {
                         apply = true
                     } catch (err) {
                         apply = false
-                        sh "terraform destroy -var 'aws_access_key=$AWS_ACCESS_KEY' -var 'aws_secret_key=$AWS_ACCESS_SECRET_KEY' -force"
+                        sh "terraform destroy -var 'aws_access_key=$ACCESS_KEY' -var 'aws_secret_key=$ACCESS_SECRET_KEY' -force"
                         currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
