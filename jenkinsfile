@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+    tools {
+        "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.12.5"
+    }
+    parameters {
+        string(name: 'WORKSPACE', defaultValue: 'development', description:'worspace to use in Terraform')
+    }
+    environment {
+        TF_HOME = tool('terraform-0.12.5')
+        TF_IN_AUTOMATION = "true"
+        PATH = "$TF_HOME:$PATH"
+        ACCESS_KEY = credentials('aws_access_key')
+        ACCESS_SECRET_KEY = credentials('aws_access_secret_key')
+    }
+    stages {
+        stage("checkout"){
+            steps {
+                    git branch: ‘master’, url: ‘git@https://github.com/topeoke/terraform’
+                }
+
+         stage(‘Set Terraform path’) {
+            steps {
+                script {
+                    def tfHome = tool name: ‘Terraform’
+                        env.PATH = “${tfHome}:${env.PATH}”
+                        }
+                sh ‘terraform — version’
+                }
+         }
+        stage('InfrastructureInitiation'){
+            steps {
+                dir('/'){
+                    sh 'terraform --version'
+                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home/terraform_plugins \
+                     --backend-config='access_key=$AWS_ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
+                    sh "echo \$PWD"
+                    sh "whoami"
+                }
+            }
+        }
+        stage('InfrastructurePlan'){
+            steps {
+                dir('/'){
+                    script {
+                        try {
+                           sh "terraform workspace new ${params.WORKSPACE}"
+                        } catch (err) {
+                            sh "terraform workspace select ${params.WORKSPACE}"
+                        }
+                        sh "terraform plan -var 'aws_access_key=$NETWORKING_ACCESS_KEY' -var 'aws_secret_key=$NETWORKING_SECRET_KEY' \
+                        > status"
+                    }
+                }
+            }
+        }
+        stage('InfrastructureApply'){
+            steps {
+                script{
+                    def apply = false
+                    try {
+                        input message: 'confirm apply', ok: 'Apply Config'
+                        apply = true
+                    } catch (err) {
+                        apply = false
+                        sh "terraform destroy -var 'aws_access_key=$AWS_ACCESS_KEY' -var 'aws_secret_key=$AWS_ACCESS_SECRET_KEY' -force"
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                    if(apply){
+                        dir('/'){
+                            sh 'terraform apply'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
