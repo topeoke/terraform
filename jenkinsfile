@@ -14,18 +14,9 @@ pipeline {
         ACCESS_SECRET_KEY = credentials('aws_access_secret_key')
     }
     stages {
-         stage(‘Set Terraform path’) {
-            steps {
-                script {
-                    def tfHome = tool name: ‘Terraform’
-                        env.PATH = “${tfHome}:${env.PATH}”
-                        }
-                sh ‘terraform — version’
-                }
-         }
         stage('InfrastructureInitiation'){
             steps {
-                dir('/'){
+                dir('project1/'){
                     sh 'terraform --version'
                     sh "terraform init -input=false -plugin-dir=/var/jenkins_home/terraform_plugins \
                      --backend-config='access_key=$AWS_ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
@@ -36,7 +27,7 @@ pipeline {
         }
         stage('InfrastructurePlan'){
             steps {
-                dir('/'){
+                dir('project1/'){
                     script {
                         try {
                            sh "terraform workspace new ${params.WORKSPACE}"
