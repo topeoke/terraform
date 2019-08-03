@@ -14,6 +14,11 @@ pipeline {
         ACCESS_SECRET_KEY = credentials('aws_access_secret_key')
     }
     stages {
+        stage("checkout"){
+            steps {
+                    git branch: ‘master’, url: ‘git@https://github.com/topeoke/terraform’
+                }
+
          stage(‘Set Terraform path’) {
             steps {
                 script {
