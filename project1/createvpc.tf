@@ -5,9 +5,10 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    key = "${var.backend_key}"
-    dynamodb_table = "${var.backend_db_table}"
-    bucket = "${var.backend_s3_bucket}"
+    key = "develop.tfstate"
+    dynamodb_table = "packectlane-state-lock-table"
+    bucket = "packetlane-infrastructure-bucket"
+    region = "eu-west-2"
   }
 }
 resource "aws_instance" "instance1" {
