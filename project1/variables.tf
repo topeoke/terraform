@@ -16,4 +16,14 @@ variable "key_name" {
   description = "KeyPair name to be used at  instance creation"
   default = "packetlaneLondonReg-KeyPairs"
 }
+variable "backend_key" {
+  description = "S3 object for the remote state"
+  default = "devvelop.tfstate"
+}
+ variable "backend_db_table" {
+   default = "packectlane-state-lock-table"
+ }
 
+variable "backend_s3_bucket" {
+  default = "packetlane-infrastructure-bucket"
+}

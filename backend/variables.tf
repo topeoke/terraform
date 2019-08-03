@@ -9,7 +9,7 @@ variable "remote_state_bucket" {
 
 variable "remote_state_dynamoDB_table" {
   description = "The name of ten dynamo DB table"
-  default = "packectlane-state-lock-table""
+  default = "packectlane-state-lock-table"
 }
 
 variable "remote_state_bucket_acl" {
