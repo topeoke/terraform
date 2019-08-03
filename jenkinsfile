@@ -1,13 +1,13 @@
 pipeline {
     agent any
     tools {
-        "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform-0.12.5"
+        "org.jenkinsci.plugins.terraform.TerraformInstallation" "Terraform v0.12.5"
     }
     parameters {
-        string(name: 'WORKSPACE', defaultValue: 'development', description:'worspace to use in Terraform')
+        string(name: 'WORKSPACE', defaultValue: 'development', description:'workspace to use in Terraform')
     }
     environment {
-        TF_HOME = tool('terraform-0.12.5')
+        TF_HOME = tool('Terraform v0.12.5')
         TF_IN_AUTOMATION = "true"
         PATH = "$TF_HOME:$PATH"
         ACCESS_KEY = credentials('aws_access_key')
