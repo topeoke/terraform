@@ -1,14 +1,15 @@
 provider "aws" {
   profile = "default"
-  region = "eu-west-2"
+  region = "${var.region}"
 }
 resource "aws_instance" "instance1" {
-  ami = "ami-0d8e27447ec2c8410"
-  instance_type = "t2-micro"
-  key_name = "packetlaneLondonReg-KeyPairs"
+  ami = "${var.ami}"
+  instance_type = "${var.instance_type}"
+  key_name = "${var.key_name}"
 
   tags = {
     Name = "instance1"
+    env = "${terraform.workspace}"
   }
 }
 
