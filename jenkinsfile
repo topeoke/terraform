@@ -34,7 +34,7 @@ pipeline {
                         } catch (err) {
                             sh "terraform workspace select ${params.WORKSPACE}"
                         }
-                        sh "terraform plan -var 'aws_access_key=$ACCESS_KEY' -var 'aws_secret_key=$ACCESS_SECRET_KEY' \
+                        sh "terraform plan -var 'aws_access_key=$ACCESS_KEY' -var 'aws_access_secret_key=$ACCESS_SECRET_KEY' \
                         > status"
                     }
                 }
