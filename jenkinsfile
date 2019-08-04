@@ -12,13 +12,14 @@ pipeline {
         PATH = "$TF_HOME:$PATH"
         ACCESS_KEY = credentials('aws_access_key_11')
         ACCESS_SECRET_KEY = credentials('aws_access_secret_key_11')
-        sh "echo $ACCESS_KEY"
-         sh "echo $ACCESS_SECRET_KEY"
+
     }
     stages {
         stage('InfrastructureInitiation'){
             steps {
                 dir('project1/'){
+                    sh "echo $ACCESS_KEY"
+                    sh "echo $ACCESS_SECRET_KEY"
                     sh 'terraform --version'
                     sh "terraform init -input=false -plugin-dir=/var/jenkins_home/terraform_plugins \
                      --backend-config='access_key=$ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
