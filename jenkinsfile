@@ -10,8 +10,8 @@ pipeline {
         TF_HOME = tool('Terraform v0.12.5')
         TF_IN_AUTOMATION = "true"
         PATH = "$TF_HOME:$PATH"
-        ACCESS_KEY = credentials('aws_access_key_11')
-        ACCESS_SECRET_KEY = credentials('aws_access_secret_key_11')
+        ACCESS_KEY = credentials('aws_access_key')
+        ACCESS_SECRET_KEY = credentials('aws_access_secret_key')
 
     }
     stages {
@@ -21,8 +21,8 @@ pipeline {
                     sh "echo $ACCESS_KEY"
                     sh "echo $ACCESS_SECRET_KEY"
                     sh 'terraform --version'
-                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home/terraform_plugins \
-                     --backend-config='access_key=$ACCESS_KEY' --backend-config='secret_key=$ACCESS_SECRET_KEY'"
+                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home \
+                     -var='aws_access_key=$ACCESS_KEY' -var='aws_secret_key=$ACCESS_SECRET_KEY'"
                     sh "echo \$PWD"
                     sh "whoami"
                 }
