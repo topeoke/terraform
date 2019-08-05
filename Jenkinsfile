@@ -8,8 +8,8 @@ pipeline {
         TF_HOME = tool('Terraform v0.12.5')
         TF_IN_AUTOMATION = "true"
         PATH = "$TF_HOME:$PATH"
-        ACCESS_KEY = credentials('aws_access_key')
-        ACCESS_SECRET_KEY = credentials('aws_access_secret_key')
+        ACCESS_KEY = credentials('aws_access_key_11')
+        ACCESS_SECRET_KEY = credentials('aws_access_secret_key_11')
 
     }
     stages {
