@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('InfrastructureInitiation'){
             steps {
-            withCredentials([string(credentialsId: 'aws_access_key_11', variable: 'aws_access_key'), string(credentialsId: 'aws_secret_access_key_11', variable: 'aws_secret_access_key')])
+            withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
             {
                 dir('project1/')
                 {
