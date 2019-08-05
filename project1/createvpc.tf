@@ -1,3 +1,6 @@
+variable "aws_access_key" {}
+variable "aws_secret_access_key" {}
+
 provider "aws" {
   region = "${var.region}"
   access_key = "${var.aws_access_key}"

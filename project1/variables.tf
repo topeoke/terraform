@@ -2,10 +2,6 @@ variable "region" {
   default = "eu-west-2"
 }
 
-variable "aws_access_key" {}
-
-variable "aws_secret_access_key" {}
-
 variable "ami" {
   description = "AMI to be installed on the EC2 instance"
   default = "ami-0d8e27447ec2c8410"
