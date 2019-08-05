@@ -21,8 +21,7 @@ pipeline {
                     sh "echo $ACCESS_KEY"
                     sh "echo $ACCESS_SECRET_KEY"
                     sh 'terraform --version'
-                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home \
-                     -var='aws_access_key=$ACCESS_KEY' -var='aws_secret_access_key=$ACCESS_SECRET_KEY'"
+                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home"
                     sh "echo \$PWD"
                     sh "whoami"
                 }
