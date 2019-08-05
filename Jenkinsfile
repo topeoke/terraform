@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        "org.jenkinsci.plugins.terraform.TerraformInstallation" "Terraform v0.12.5"
-    }
+
     parameters {
         string(name: 'WORKSPACE', defaultValue: 'development', description:'workspace to use in Terraform')
     }
