@@ -17,7 +17,7 @@ pipeline {
                 dir('project1/')
                 {
                     sh 'terraform --version'
-                    sh "terraform init -plugin-dir=/var/jenkins_home"
+                    sh "terraform init -var aws_access_key=${aws_access_key} -var aws_secret_access_key=${aws_secret_access_key}   -plugin-dir=/var/jenkins_home"
                     sh "echo \$PWD"
                     sh "whoami"
                 }
