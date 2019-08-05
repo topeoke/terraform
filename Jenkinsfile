@@ -14,9 +14,8 @@ pipeline {
             steps {
             withCredentials([string(credentialsId: 'aws_access_key_11', variable: 'aws_access_key'), string(credentialsId: 'aws_secret_access_key_11', variable: 'aws_secret_access_key')])
             {
-                dir('project1/'){
-                    sh "echo $ACCESS_KEY"
-                    sh "echo $ACCESS_SECRET_KEY"
+                dir('project1/')
+                {
                     sh 'terraform --version'
                     sh "terraform init -input=false -plugin-dir=/var/jenkins_home"
                     sh "echo \$PWD"
