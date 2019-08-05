@@ -17,7 +17,7 @@ pipeline {
                 dir('project1/')
                 {
                     sh 'terraform --version'
-                    sh "terraform init -input=false -var access_key=${aws_access_key} -var secret_key=${aws_secret_access_key}"
+                    sh 'terraform init -input=false -var access_key=${aws_access_key} -var secret_key=${aws_secret_access_key}'
                     sh "echo \$PWD"
                     sh "whoami"
                 }
