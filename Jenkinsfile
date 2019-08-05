@@ -17,7 +17,7 @@ pipeline {
                 dir('project1/')
                 {
                     sh 'terraform --version'
-                    sh "terraform init -input=false -plugin-dir=/var/jenkins_home"
+                    sh "terraform init -input=false -var-file='variables.tfvars' -plugin-dir=/var/jenkins_home"
                     sh "echo \$PWD"
                     sh "whoami"
                 }
