@@ -10,11 +10,11 @@ pipeline {
         PATH = "$TF_HOME:$PATH"
     }
     stages {
-        stage('InfrastructureInitiation'){
+        stage('Infrastructure Initiation'){
             steps {
             withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
             {
-                dir('project1/')
+                dir('project2/')
                 {
                     sh 'terraform --version'
                     sh "terraform init -input=false --backend-config='access_key=$aws_access_key' --backend-config='secret_key=$aws_secret_access_key'"
@@ -24,11 +24,11 @@ pipeline {
             }
             }
         }
-        stage('InfrastructurePlan'){
+        stage('Infrastructure Plan'){
             steps {
             withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
                {
-                dir('project1/'){
+                dir('project2/'){
                     script {
                         try {
                            sh "terraform workspace new ${params.WORKSPACE}"
@@ -43,7 +43,7 @@ pipeline {
             }
             }
         }
-        stage('InfrastructureApply'){
+        stage('Infrastructure Apply'){
             steps {
             withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
                {
@@ -58,7 +58,7 @@ pipeline {
                         currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
-                        dir('project1/'){
+                        dir('project2/'){
                             sh "terraform apply -auto-approve -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                         }
                     }
