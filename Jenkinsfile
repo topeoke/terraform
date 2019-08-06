@@ -26,25 +26,27 @@ pipeline {
         }
         stage('InfrastructurePlan'){
             steps {
+            withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
+               {
                 dir('project1/'){
                     script {
                         try {
                            sh "terraform workspace new ${params.WORKSPACE}"
                            echo "moving on now 3"
-                           sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                         } catch (err) {
                             sh "terraform workspace select ${params.WORKSPACE}"
                             echo "moving on now"
-                            sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
-                            echo "moving on now 2"
                         }
                         sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                     }
                 }
             }
+            }
         }
         stage('InfrastructureApply'){
             steps {
+            withCredentials([string(credentialsId: 'access_key', variable: 'aws_access_key'), string(credentialsId: 'secret_key', variable: 'aws_secret_access_key')])
+               {
                 script{
                     def apply = false
                     try {
@@ -64,4 +66,5 @@ pipeline {
             }
         }
     }
+}
 }
