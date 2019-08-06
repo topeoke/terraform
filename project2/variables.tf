@@ -33,9 +33,6 @@ variable "allowall" {
   default = "0.0.0.0/0"
 }
 
-variable "aws_access_key" {}
-
-variable "aws_secret_access_key" {}
 
 variable "cidrVPC" {
   description = "CIDR Block to be used for the Custom VPC"
