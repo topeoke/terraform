@@ -33,7 +33,7 @@ pipeline {
                         } catch (err) {
                             sh "terraform workspace select ${params.WORKSPACE}"
                         }
-                        sh "terraform plan -var 'aws_access_key=$ACCESS_KEY' -var 'aws_access_secret_key=$ACCESS_SECRET_KEY' \
+                        sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'" \
                         > status"
                     }
                 }
@@ -48,11 +48,11 @@ pipeline {
                         apply = true
                     } catch (err) {
                         apply = false
-                        sh "terraform destroy -var 'aws_access_key=$ACCESS_KEY' -var 'aws_secret_key=$ACCESS_SECRET_KEY' -force"
+                        sh "terraform destroy -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key' -force"
                         currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
-                        dir('/'){
+                        dir('project1/'){
                             sh 'terraform apply'
                         }
                     }
