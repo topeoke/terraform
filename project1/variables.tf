@@ -27,3 +27,8 @@ variable "backend_key" {
 variable "backend_s3_bucket" {
   default = "packetlane-infrastructure-bucket"
 }
+
+variable "allowall" {
+  description = "Allowing all hosts"
+  default = "0.0.0.0/0"
+}
