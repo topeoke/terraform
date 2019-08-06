@@ -30,9 +30,13 @@ pipeline {
                     script {
                         try {
                            sh "terraform workspace new ${params.WORKSPACE}"
+                           echo "moving on now 3"
+                           sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                         } catch (err) {
                             sh "terraform workspace select ${params.WORKSPACE}"
                             echo "moving on now"
+                            sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
+                            echo "moving on now 2"
                         }
                         sh "terraform plan -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                     }
