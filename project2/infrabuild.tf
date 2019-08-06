@@ -24,11 +24,11 @@ module "vpc" {
   azs = "${data.aws_availability_zones.AZS.names}"
 
   private_subnets = [
-  for item in var.count_private_subnet
+  for item in var.count_private_subnet:
   cidrsubnet("${var.cidrVPC}", 8, item+1)
   ]
   public_subnets = [
-  for item in var.count_public_subnet
+  for item in var.count_public_subnet:
   cidrsubnet("${var.cidrVPC}", 8, item+10)
   ]
 
