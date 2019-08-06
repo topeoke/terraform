@@ -59,7 +59,7 @@ pipeline {
                     }
                     if(apply){
                         dir('project1/'){
-                            sh "terraform apply -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
+                            sh "terraform apply -auto-approve -var 'access_key=$aws_access_key' -var 'secret_key=$aws_secret_access_key'"
                         }
                     }
                 }
