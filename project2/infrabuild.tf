@@ -1,7 +1,6 @@
 variable "access_key" {}
 variable "secret_key" {}
 
-
 provider "aws" {
   region = "${var.region}"
   access_key = "${var.access_key}"
@@ -19,6 +18,17 @@ terraform {
 
 data "aws_availability_zones" "AZS" {
   state = "available"
+}
+
+resource "aws_s3_bucket" "loadbalancer_log" {
+  bucket = "packet_lane_loadbalancer_logs"
+  region = "${var.region}"
+  acl = "private"
+
+  tags = {
+    Terraform = "true"
+    Environment  = "${terraform.workspace}"
+  }
 }
 
 module "vpc" {
@@ -46,4 +56,82 @@ module "vpc" {
 
   }
 
+resource "aws_security_group" "management_sg" {
+  name = "management_sg"
+  description = "Security Group Allowing management access via SSH"
+  ingress {
+    from_port = 22
+    protocol = "tcp"
+    to_port = 22
 
+    cidr_blocks = [
+      "${var.allowall}"]
+  }
+
+
+  tags = {
+
+    Environment = "${terraform.workspace}"
+    Terraform = "true"
+  }
+}
+
+resource "aws_security_group" "webserver_sg" {
+  name = "webserver_sg"
+  description = "Security Group allowing web traffic"
+
+  ingress {
+    from_port = 80
+    protocol = "tcp"
+    to_port = 80
+
+    cidr_blocks = [
+      "${var.allowall}"]
+    }
+
+  ingress {
+    from_port = 443
+    protocol = "tcp"
+    to_port = 443
+
+    cidr_blocks = [
+      "${var.allowall}"]
+    }
+
+
+  tags = {
+
+    Environment = "${terraform.workspace}"
+    Terraform = "true"
+  }
+}
+
+resource "aws_security_group" "database_sg" {
+  name = "database_sg"
+  description = "Security Group for database access"
+  ingress {
+    from_port = 3306
+    protocol = "tcp"
+    to_port = 3306
+
+    security_groups = ["${aws_security_group.webserver_sg}","${aws_security_group.management_sg}"]
+  }
+}
+
+resource "aws_lb" "infrastructure_lb" {
+  name               = "infrastructure_lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = ["${aws_security_group.webserver_sg.id}"]
+  subnet = "${module.vpc.public_subnets}"
+
+  access_logs {
+    bucket  = "${aws_s3_bucket.loadbalancer_log.bucket}"
+    prefix  = "Infra-loadbalancer-lb"
+    enabled = true
+  }
+
+  tags = {
+    Environment = "${terraform.workspace}"
+  }
+}
