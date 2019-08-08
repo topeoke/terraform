@@ -124,6 +124,7 @@ resource "aws_lb" "infrastructure_lb" {
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.webserver_sg.id}"]
   subnets = "${module.vpc.public_subnets}"
+  vpc_id = "${module.vpc.vpc_id}"
 
   access_logs {
     bucket  = "${aws_s3_bucket.loadbalancer_log.bucket}"
