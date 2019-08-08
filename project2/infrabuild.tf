@@ -59,6 +59,7 @@ module "vpc" {
 resource "aws_security_group" "management_sg" {
   name = "managementSG"
   description = "Security Group Allowing management access via SSH"
+  vpc_id = "${module.vpc.vpc_id}"
   ingress {
     from_port = 22
     protocol = "tcp"
@@ -79,7 +80,7 @@ resource "aws_security_group" "management_sg" {
 resource "aws_security_group" "webserver_sg" {
   name = "webserverSG"
   description = "Security Group allowing web traffic"
-
+  vpc_id = "${module.vpc.vpc_id}"
   ingress {
     from_port = 80
     protocol = "tcp"
@@ -109,6 +110,7 @@ resource "aws_security_group" "webserver_sg" {
 resource "aws_security_group" "database_sg" {
   name = "databaseSG"
   description = "Security Group for database access"
+  vpc_id = "${module.vpc.vpc_id}"
   ingress {
     from_port = 3306
     protocol = "tcp"
@@ -116,6 +118,7 @@ resource "aws_security_group" "database_sg" {
 
     security_groups = ["${aws_security_group.webserver_sg.id}","${aws_security_group.management_sg.id}"]
   }
+
 }
 
 resource "aws_lb" "infrastructure_lb" {
