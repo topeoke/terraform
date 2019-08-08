@@ -114,7 +114,7 @@ resource "aws_security_group" "database_sg" {
     protocol = "tcp"
     to_port = 3306
 
-    security_groups = ["${aws_security_group.webserver_sg}","${aws_security_group.management_sg}"]
+    security_groups = ["${aws_security_group.webserver_sg.id}","${aws_security_group.management_sg.id}"]
   }
 }
 
