@@ -123,7 +123,7 @@ resource "aws_lb" "infrastructure_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.webserver_sg.id}"]
-  subnet = "${module.vpc.public_subnets}"
+  subnets = "${module.vpc.public_subnets}"
 
   access_logs {
     bucket  = "${aws_s3_bucket.loadbalancer_log.bucket}"
