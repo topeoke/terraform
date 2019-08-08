@@ -35,7 +35,7 @@ resource "aws_s3_bucket" "loadbalancer_log" {
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
-  name = "infrastructureVPC"
+  name = "infrastructure-VPC-${terraform.workspace}"
   cidr = "${var.cidrVPC}"
   azs = "${data.aws_availability_zones.AZS.names}"
 
