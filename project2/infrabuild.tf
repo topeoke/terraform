@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "loadbalancer_log" {
   region = "${var.region}"
   acl = "private"
   policy = "${file("lbS3BucketPolicy.json")}"
+  force_destroy = true
 
   tags = {
     Terraform = "true"
