@@ -24,6 +24,7 @@ resource "aws_s3_bucket" "loadbalancer_log" {
   bucket = "packet-lane-loadbalancer-logs"
   region = "${var.region}"
   acl = "private"
+  policy = "${file("lbS3BucketPolicy.json")}"
 
   tags = {
     Terraform = "true"
@@ -51,6 +52,7 @@ module "vpc" {
   tags = {
     Terraform = "true"
     Enviroment = "${terraform.workspace}"
+    Name = "Infrastructure-VPC-${terraform.workspace}"
 
   }
 
@@ -71,7 +73,7 @@ resource "aws_security_group" "management_sg" {
 
 
   tags = {
-
+    Name = "Management-SG-${terraform.workspace}"
     Environment = "${terraform.workspace}"
     Terraform = "true"
   }
@@ -101,7 +103,7 @@ resource "aws_security_group" "webserver_sg" {
 
 
   tags = {
-
+    Name = "WebServer-SG-${terraform.workspace}"
     Environment = "${terraform.workspace}"
     Terraform = "true"
   }
@@ -119,6 +121,12 @@ resource "aws_security_group" "database_sg" {
     security_groups = ["${aws_security_group.webserver_sg.id}","${aws_security_group.management_sg.id}"]
   }
 
+  tags = {
+    Name = "Database-SG-${terraform.workspace}"
+    Environment = "${terraform.workspace}"
+    Terraform = "true"
+  }
+
 }
 
 resource "aws_lb" "infrastructure_lb" {
@@ -128,6 +136,7 @@ resource "aws_lb" "infrastructure_lb" {
   security_groups    = ["${aws_security_group.webserver_sg.id}"]
   subnets = "${module.vpc.public_subnets}"
 
+
   access_logs {
     bucket  = "${aws_s3_bucket.loadbalancer_log.bucket}"
     prefix  = "Infra-loadbalancer-lb"
@@ -135,6 +144,7 @@ resource "aws_lb" "infrastructure_lb" {
   }
 
   tags = {
+    Name = "Infrastructure-LB-${terraform.workspace}"
     Environment = "${terraform.workspace}"
   }
 }

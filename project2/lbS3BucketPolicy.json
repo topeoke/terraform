@@ -1,0 +1,19 @@
+{
+  "Id": "Policy1565264550689",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1565264546453",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::packet-lane-loadbalancer-logs/Infra-loadbalancer-lb/AWSLogs/851049866434/*",
+      "Principal": {
+        "AWS": [
+          "652711504416"
+        ]
+      }
+    }
+  ]
+}
